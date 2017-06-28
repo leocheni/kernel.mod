@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
-Class-Path: lib/jsonrpc2-base-1.31.jar
+Class-Path: ../lib/jsonrpc2-base-1.31.jar
 Main-Class: net.msdh.kernel.Kernel
 

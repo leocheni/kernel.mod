@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="kernel">
-    <output-path>$PROJECT_DIR$/out/artifacts/kernel</output-path>
+    <output-path>$PROJECT_DIR$/out/artifacts/kernel/bin</output-path>
     <root id="archive" name="kernel.jar">
       <element id="module-output" name="kernel.mod" />
       <element id="directory" name="META-INF">

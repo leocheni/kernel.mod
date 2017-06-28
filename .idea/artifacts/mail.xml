@@ -1,12 +1,42 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="mail">
-    <output-path>$PROJECT_DIR$/out/artifacts/mail</output-path>
+  <artifact type="jar" build-on-make="true" name="mail">
+    <output-path>$PROJECT_DIR$/out/artifacts/kernel/modules</output-path>
     <root id="archive" name="mail.jar">
-      <element id="module-output" name="mail" />
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/mail/META-INF/MANIFEST.MF" />
       </element>
-      <element id="module-output" name="kernel.mod" />
+      <element id="directory" name="net">
+        <element id="directory" name="msdh">
+          <element id="directory" name="kernel">
+            <element id="directory" name="mail">
+              <element id="file-copy" path="$PROJECT_DIR$/out/production/mail/net/msdh/kernel/mail/Mail.class" />
+              <element id="file-copy" path="$PROJECT_DIR$/out/production/mail/net/msdh/kernel/mail/Main.class" />
+            </element>
+            <element id="directory" name="net">
+              <element id="file-copy" path="$PROJECT_DIR$/out/production/kernel.mod/net/msdh/kernel/net/NetClient.class" />
+              <element id="file-copy" path="$PROJECT_DIR$/out/production/kernel.mod/net/msdh/kernel/net/NetServer.class" />
+              <element id="file-copy" path="$PROJECT_DIR$/out/production/kernel.mod/net/msdh/kernel/net/SmtpClient.class" />
+              <element id="file-copy" path="$PROJECT_DIR$/out/production/kernel.mod/net/msdh/kernel/net/ImapClient.class" />
+            </element>
+            <element id="directory" name="settings">
+              <element id="file-copy" path="$PROJECT_DIR$/out/production/kernel.mod/net/msdh/kernel/settings/Settings.class" />
+            </element>
+            <element id="directory" name="base">
+              <element id="file-copy" path="$PROJECT_DIR$/out/production/kernel.mod/net/msdh/kernel/base/Queue.class" />
+              <element id="file-copy" path="$PROJECT_DIR$/out/production/kernel.mod/net/msdh/kernel/base/Command.class" />
+            </element>
+            <element id="directory" name="utils">
+              <element id="file-copy" path="$PROJECT_DIR$/out/production/kernel.mod/net/msdh/kernel/utils/Log.class" />
+            </element>
+            <element id="directory" name="ui">
+              <element id="file-copy" path="$PROJECT_DIR$/out/production/kernel.mod/net/msdh/kernel/ui/Display.class" />
+            </element>
+            <element id="directory" name="errors">
+              <element id="file-copy" path="$PROJECT_DIR$/out/production/kernel.mod/net/msdh/kernel/errors/CoreException.class" />
+            </element>
+          </element>
+        </element>
+      </element>
     </root>
   </artifact>
 </component>

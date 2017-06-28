@@ -17,7 +17,6 @@ import java.io.IOException;
 public class Main {
   public static void main(String[] args) {
 
-
     try {
       Log.getInstance().Open("F:\\dev\\projects\\lab\\dh\\kernel.mod\\out\\artifacts\\kernel\\log\\mail.log");
       //Log.getInstance().Open("C:\\projects\\dh\\kernel.mod\\out\\artifacts\\kernel\\log\\core.log");
