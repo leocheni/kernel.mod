@@ -39,8 +39,10 @@ public class Mod {
   Log.getInstance().D("MODULE::MOD", "bin: " + bin + "/" + name);
 
       try {
-          Systems.run("java -jar " +name+".jar");
-        Display.getInstance().E("Mod..Load", name + " mod start ok");
+          Systems.run("java -jar " +name+".jar"); ///todo сделать обработку ошибки запуска jar файла
+          status = "up";
+          Display.getInstance().E("Mod.Load", name + " mod start ok");
+
       }
       catch (IOException e) {
         Log.getInstance().E("Mod.Load",e.getMessage());

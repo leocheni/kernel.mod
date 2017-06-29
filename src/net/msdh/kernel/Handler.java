@@ -106,20 +106,22 @@ class Handler implements Runnable {
             //  netServer.Send(answer);
 //            }
 //            else{
-              try {
-                Mod console = core.Modules.GetMod("console");
-                if(console.getStatus().equals("up")){
+              if(command.getId()!=1){
+                try {
+                  Mod console = core.Modules.GetMod("console");
+                  if(console.getStatus().equals("up")){
 
                  // Map<String,Object> params = new HashMap<String, Object>();
                  // params.put("message",answer);
 //                  netClient.Send(console.getAdress(), console.getPort(), new Command("notification",params, 1).toJson());
-                  netClient.Send(console.getAdress(), console.getPort(), answer);
+                    netClient.Send(console.getAdress(), console.getPort(), answer);
                  // netClient.Close();
+                  }
                 }
-              }
-              catch (CoreException e) {
-                Display.getInstance().E("Core.Handler","Error: " + e.getMessage());
-                Log.getInstance().E("Core.Handler","Error: " + e.getMessage());
+                catch (CoreException e) {
+                  Display.getInstance().E("Core.Handler","Error: " + e.getMessage());
+                  Log.getInstance().E("Core.Handler","Error: " + e.getMessage());
+                }
               }
 //            }
           }

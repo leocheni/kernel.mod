@@ -3,6 +3,7 @@ package net.msdh.kernel.module;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import net.msdh.kernel.errors.CoreException;
+import net.msdh.kernel.ui.Display;
 
 import java.util.Vector;
 
@@ -26,16 +27,22 @@ public void Load() throws CoreException{
     if(mod.getStatus().equals("down")){
       mod.load();
     }
+
   }
 }
 
 public void Load(String name)throws CoreException{
   int modIndex = getModIndex(name);
   if(modIndex!=-1){
-    mods.get(modIndex).load();
+    if(mods.get(modIndex).getStatus().equals("down")){
+      mods.get(modIndex).load();
+    }
+    else{
+      throw new CoreException(208,"Modules.load", "Module already up");
+    }
   }
   else{
-    throw new CoreException(202,"Module::Load"," - Module isn't found");
+    throw new CoreException(202,"Modules.Load","Module isn't found");
   }
 }
 
@@ -44,6 +51,7 @@ public void Unload(boolean force)throws CoreException{
   try{
     for(Mod mod:mods){
       if(mod.getStatus().equals("up")){
+        Display.getInstance().D("Core.Unload", "Unload mod:" + mod.getName());
         mod.unload(force);
       }
     }
@@ -56,10 +64,15 @@ public void Unload(boolean force)throws CoreException{
 public void Unload(String name, boolean force)throws CoreException{
   int modIndex = getModIndex(name);
   if(modIndex!=-1){
-    mods.get(modIndex).unload(false);
+    if(mods.get(modIndex).getStatus().equals("down")){
+      mods.get(modIndex).unload(false);
+    }
+    else{
+      throw new CoreException(203,"Module.Unload"," - Module already is down");
+    }
   }
   else{
-    throw new CoreException(203,"Module::Unload"," - Module isn't found");
+    throw new CoreException(203,"Module.Unload"," - Module isn't found");
   }
 }
 

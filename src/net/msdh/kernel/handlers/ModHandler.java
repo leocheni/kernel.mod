@@ -26,11 +26,13 @@ public class ModHandler {
        int id = 0;
       Map<String,Object> result = new HashMap<String, Object>();
       Map<String,Object> error = new HashMap<String, Object>();
+
       try{
         action = cmd.getParams().get("action").toString();
         name = cmd.getParams().get("item").toString();
         id = cmd.getId();
       }
+
       catch (Exception e){
         Display.getInstance().E("MODHandler","error get param");
       }
@@ -126,18 +128,55 @@ public class ModHandler {
     }
     else if(action!=null&&action.equals("get")){ //polushenie informacii modulya
 
-//      if(c.P2()=="status"){
-//
-//      }
-//      else if(c.P2()=="info"){
-//
-//      }
+      String param = null;
+
+      try{
+        param = cmd.getParams().get("status").toString();
+      }
+      catch (Exception e){
+        Display.getInstance().E("MODHandler","error get param");
+      }
+
+      if(param!=null&&param.equals("status")){
+        try{
+          answer = core.Modules.GetMod(name).getStatus();
+        }
+        catch(CoreException e){
+          Display.getInstance().E("CORE::ModHandler","Error: "+e.getMessage());
+          Log.getInstance().E("CORE::ModHandler",e.getMessage());
+        }
+      }
+      else if(param!=null&&param.equals("")){
+
+
+      }
     }
     else if(action!=null&&action.equals("set")){ //ustanovka informacii ot modulya v structuru yadra
+      String param = null;
+      String value = null;
+      try{
+        param = cmd.getParams().get("param").toString();
+        value = cmd.getParams().get("value").toString();
+      }
+      catch (Exception e){
+        Display.getInstance().E("MODHandler","error get param");
+      }
+
+      if(param!=null&&param.equals("status")){
+        try{
+          core.Modules.GetMod(name).setStatus(value);
+        }
+        catch(CoreException e){
+          Display.getInstance().E("CORE::ModHandler","Error: "+e.getMessage());
+          Log.getInstance().E("CORE::ModHandler",e.getMessage());
+        }
+      }
+      else if(param!=null&&param.equals("")){
 
 
+      }
     }
-    else if(action!=null&&action.equals("show")){ //poluchenie informacii o modulyah
+    else if(action!=null&&action.equals("show")){
      // try{
         answer = new Result(id,core.Modules.getModList()).toJson();
 
