@@ -5,6 +5,7 @@ import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Created by IntelliJ IDEA.
@@ -33,7 +34,13 @@ public class Queue {
   public void cmdParser(String line){
     Map<String,Object> params =  new HashMap<String, Object>();
 
-    String[] tokens = line.split(" ");
+
+     Pattern p = Pattern.compile(" ");
+     String[] tokens = p.split(line);
+//            params.put(words[0],words[1]);
+//
+
+    //String[] tokens = line.split(" ");
       //if(tokens.length>4) return;
 
     command.setMethod(tokens[0]);
