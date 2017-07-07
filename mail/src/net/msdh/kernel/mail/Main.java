@@ -37,7 +37,7 @@ public class Main {
        // Settings.getInstance().Load("conf/mail.conf");
 
 
-        Mail mMail = new Mail();
+        Mail mMail = new Mail();     ///todo отладить модуль
         mMail.Load();
         mMail.Manager();
         mMail.Unload();

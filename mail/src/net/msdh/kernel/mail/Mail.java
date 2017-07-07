@@ -201,6 +201,8 @@ public void run(){
         Display.getInstance().D("Mail.run",message.toJSONString());
       }
 
+      ///todo реализовать разбор команды и отправку ее в ядро
+
       int[] i = new int[1];
       i[0] = 1;
       mc.DeleteMessage(i);

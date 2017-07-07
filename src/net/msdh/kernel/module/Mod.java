@@ -33,24 +33,28 @@ public class Mod {
 
   }
 
-  public void load() {
+  public void load() throws CoreException {
 
   Log.getInstance().D("MODULE::MOD", "run: " + run + "/" + name);
   Log.getInstance().D("MODULE::MOD", "bin: " + bin + "/" + name);
 
       try {
-          Systems.run("java -jar " +name+".jar"); ///todo сделать обработку ошибки запуска jar файла
+          ///todo сделать проверку наличия модуля в папке модуля
+
+          Systems.run("java -jar " +"../modules/" +name+".jar"); ///todo сделать обработку ошибки запуска jar файла
           status = "up";
           Display.getInstance().E("Mod.Load", name + " mod start ok");
-
       }
       catch (IOException e) {
         Log.getInstance().E("Mod.Load",e.getMessage());
         Display.getInstance().E("Mod.Load",e.getMessage());
+        throw new CoreException(800,"Mod.Load",e.getMessage());
       }
       catch (InterruptedException e) {
         Log.getInstance().E("Mod.Load",e.getMessage());
         Display.getInstance().E("Mod.Load",e.getMessage());
+        throw new CoreException(800,"Mod.Load",e.getMessage());
+
       }
       ///todo реализовать загрузку jar файла в другом процессе JVM.
 //  if(File::fileExists((bin+"/"+name).c_str())){

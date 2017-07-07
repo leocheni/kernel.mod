@@ -73,19 +73,19 @@ public class Hosts {
 //    }
 //
 //  }
-  void Shutdown(String name){
-
-
-  }
-  void Reboot(String name){
-
-
-  }
-
-  public void GetStatus(String name){
-
-
-  }
+//  void Shutdown(String name){
+//
+//
+//  }
+//  void Reboot(String name){
+//
+//
+//  }
+//
+//  public void GetStatus(String name){
+//
+//
+//  }
 
   public int GetHostCount(){
     return hosts.size();

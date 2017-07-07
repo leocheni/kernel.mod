@@ -8,6 +8,7 @@ import net.msdh.kernel.module.Mod;
 import net.msdh.kernel.net.Connection;
 import net.msdh.kernel.net.NetClient;
 import net.msdh.kernel.net.NetServer;
+import net.msdh.kernel.net.SmtpClient;
 import net.msdh.kernel.ui.Display;
 import net.msdh.kernel.utils.Log;
 
@@ -101,29 +102,42 @@ class Handler implements Runnable {
           }
 
           if(answer != null){
-            netServer.Send(answer);
-//            if(command.getId()==1){
-            //  netServer.Send(answer);
-//            }
-//            else{
-              if(command.getId()!=1){
-                try {
-                  Mod console = core.Modules.GetMod("console");
-                  if(console.getStatus().equals("up")){
 
-                 // Map<String,Object> params = new HashMap<String, Object>();
-                 // params.put("message",answer);
-//                  netClient.Send(console.getAdress(), console.getPort(), new Command("notification",params, 1).toJson());
-                    netClient.Send(console.getAdress(), console.getPort(), answer);
-                 // netClient.Close();
-                  }
-                }
-                catch (CoreException e) {
-                  Display.getInstance().E("Core.Handler","Error: " + e.getMessage());
-                  Log.getInstance().E("Core.Handler","Error: " + e.getMessage());
+            if(command.getId()!=1){
+              try {
+                Mod console = core.Modules.GetMod("console");
+                if(console.getStatus().equals("up")){
+                  netClient.Send(console.getAdress(), console.getPort(), answer);
+                  netClient.Close();
                 }
               }
-//            }
+              catch (CoreException e){
+                Display.getInstance().E("Core.Handler","Error: " + e.getMessage());
+                Log.getInstance().E("Core.Handler","Error: " + e.getMessage());
+              }
+            }
+            else if(command.getId()==1){
+              netServer.Send(answer);
+            }
+            else if(command.getId()==4){
+
+              //netServer.Send(answer);
+              SmtpClient smc = new SmtpClient("smtp.yandex.ru",465);
+              smc.Connect("smtp.yandex.ru:465");
+              smc.SendMessage("testup@yandex.ru",answer);
+
+//              try {
+//                Mod mail = core.Modules.GetMod("console");
+//                if(mail.getStatus().equals("up")){
+//                  netClient.Send(mail.getAdress(), mail.getPort(), answer);
+//                  netClient.Close();
+//                }
+//              }
+//              catch (CoreException e){
+//                Display.getInstance().E("Core.Handler","Error: " + e.getMessage());
+//                Log.getInstance().E("Core.Handler","Error: " + e.getMessage());
+//              }
+            }
           }
           else{
             netServer.Send(underConstruction(command));

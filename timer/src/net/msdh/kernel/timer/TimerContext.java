@@ -43,6 +43,8 @@ public class TimerContext extends Thread{
 
      Active = true;
 
+       ///todo реализовать циклическое выполнение таймера
+
        try{
          Thread.sleep(Count);
        }

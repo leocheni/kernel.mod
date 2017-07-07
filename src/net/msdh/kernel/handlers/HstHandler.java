@@ -18,13 +18,6 @@ import net.msdh.kernel.utils.Log;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by IntelliJ IDEA.
- * User: TkachenkoAA
- * Date: 19.05.17
- * Time: 14:26
- * To change this template use File | Settings | File Templates.
- */
 public class HstHandler {
    public String Run(Command cmd, Core core){
      Display.getInstance().D("HstHandler", "Start");
@@ -122,9 +115,8 @@ public class HstHandler {
        try{
          JSONObject tParams= (JSONObject) cmd.getParams().get("host");
 
-         Host host = null;       ///todo сделать корректную обратоку отсутсвия хоста в пуле
          try {
-           host = core.Hostss.GetHost(tParams.get("name").toString());
+           Host host = core.Hostss.GetHost(tParams.get("name").toString());
 
            if(host.getInterfaces()!=null){
              host.getInterfaces().clear();
@@ -274,13 +266,14 @@ public class HstHandler {
 
          }
          catch(CoreException e){
-//           error.put("code",e.getCode());
-//           error.put("source",e.getSource());
-//           error.put("message",e.getMessage());
-//           answer = new net.msdh.kernel.answer.Error(id,error).toJson();
 
-           Display.getInstance().E("HstHandler.Started","Error: " + e.getMessage());
-           Log.getInstance().E("HstHandler.Started","Error: " + e.getMessage());
+           if(e.getCode()==500){
+              core.Hostss.AddHost(new Host(tParams));
+           }
+           else{
+             Display.getInstance().E("HstHandler.Started","Error: " + e.getMessage());
+             Log.getInstance().E("HstHandler.Started","Error: " + e.getMessage());
+           }
          }
        }
        catch (Exception e){
@@ -305,7 +298,7 @@ public class HstHandler {
          Log.getInstance().E("CORE::HstHandler",e.getMessage());
        }
      }
-     else if(action!=null&&action.equals("rescan")){
+     else if(action!=null&&action.equals("rescan")){   /// todo реализовать опрос всех хостов
        //get info all hosts
      }
      else if(action!=null&&action.equals("exec")){

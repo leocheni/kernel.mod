@@ -12,13 +12,6 @@ import net.msdh.kernel.utils.Log;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by IntelliJ IDEA.
- * User: TkachenkoAA
- * Date: 19.05.17
- * Time: 14:25
- * To change this template use File | Settings | File Templates.
- */
 public class ModHandler {
     public String Run(Command cmd, Core core){
       System.out.println("ModHandler");
@@ -117,7 +110,7 @@ public class ModHandler {
         Log.getInstance().E("CORE::ModHandler",e.getMessage());
       }
     }
-    else if(action!=null&&action.equals("comands")){
+    else if(action!=null&&action.equals("rescan")){ ///todo реализовать опрос всех модулей
 //      try{
 //        Connect.SendServer(underConstruction(c));
 //      }

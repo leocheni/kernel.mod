@@ -1,6 +1,5 @@
 package net.msdh.kernel.settings;
 
-import com.sun.xml.internal.ws.api.config.management.policy.ManagementAssertion;
 import net.minidev.json.JSONObject;
 import net.minidev.json.JSONValue;
 import net.minidev.json.parser.ParseException;
@@ -20,8 +19,10 @@ public class Settings {
 
    private static volatile Settings instance;
    private String source;
-
    public JSONObject Base;
+
+   private String coreAdress;
+   private int corePort;
 
    private boolean inicialized;
 
@@ -77,4 +78,20 @@ public class Settings {
   public boolean isInicialized() {
     return inicialized;
   }
+
+    public String getCoreAdress() {
+        return coreAdress;
+    }
+
+    public void setCoreAdress(String coreAdress) {
+        this.coreAdress = coreAdress;
+    }
+
+    public int getCorePort() {
+        return corePort;
+    }
+
+    public void setCorePort(int corePort) {
+        this.corePort = corePort;
+    }
 }

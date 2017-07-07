@@ -8,13 +8,11 @@ import net.msdh.kernel.net.NetClient;
 import net.msdh.kernel.settings.Settings;
 import net.msdh.kernel.system.*;
 import net.msdh.kernel.ui.Display;
-import net.msdh.kernel.utils.Format;
 import net.msdh.kernel.utils.Log;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
@@ -54,6 +52,17 @@ public class Host {
     private Vector<Interface> interfaces;
 
     public Host(){
+      cpu = new Cpu();
+      memory = new Memory();
+      power = new Power();
+      disks = new Vector<Disk>();
+      slices = new Vector<Slice>();
+      interfaces = new Vector<Interface>();
+      zpools = new Vector<Zpool>();
+    }
+
+
+    public Host(JSONObject params){
 
       cpu = new Cpu();
       memory = new Memory();
@@ -62,6 +71,119 @@ public class Host {
       slices = new Vector<Slice>();
       interfaces = new Vector<Interface>();
       zpools = new Vector<Zpool>();
+
+      this.setStatus("up");
+      try{
+        this.port = Integer.parseInt(params.get("port").toString());
+      }
+      catch(Exception e){
+        this.port = 0;
+      }
+
+      try{
+        this.osType = params.get("os").toString();
+      }
+      catch(Exception e){
+        this.osType = "N/A";
+      }
+      try{
+        this.uname = params.get("uname").toString();
+      }
+      catch(Exception e){
+        this.uname = "N/A";
+      }
+
+      try{
+        this.uptime = params.get("uptime").toString();
+      }
+      catch(Exception e){
+        this.uptime = "N/A";
+      }
+
+      try{
+        JSONObject tCpu = (JSONObject) params.get("cpu");
+        this.cpu.cores = Integer.parseInt(tCpu.get("cpuCores").toString());
+        this.cpu.freq = tCpu.get("cpuFreq").toString();
+        this.cpu.model = tCpu.get("cpuModel").toString();
+        this.cpu.temp = tCpu.get("cpuTemp").toString();
+        this.cpu.usage = Integer.parseInt(tCpu.get("cpuUsed").toString());
+      }
+      catch(Exception ignored){ }
+
+      try{
+        JSONObject tMemory = (JSONObject) params.get("memory");
+                    //host.memory.physical = tMemory.get<double>("memPhysical");
+        this.memory.total = Double.parseDouble(tMemory.get("memTotal").toString());
+        this.memory.usage = Double.parseDouble(tMemory.get("memUsed").toString());
+        this.memory.free = Double.parseDouble(tMemory.get("memFree").toString());
+      }
+      catch(Exception ignored){ }
+
+      try{
+        JSONObject tPower = (JSONObject) params.get("power");
+        this.power.setCharge(tPower.get("charge").toString());
+        this.power.setModel(tPower.get("model").toString());
+        this.power.setInputVoltage(tPower.get("inputVoltage").toString());
+        this.power.setOutputVoltage(tPower.get("outputVoltage").toString());
+        this.power.setLoad(tPower.get("load").toString());
+        this.power.setType(tPower.get("type").toString());
+        this.power.setStatus(tPower.get("status").toString());
+      }
+      catch(Exception ignored){ }
+
+      try{
+        JSONArray tInterfaces = (JSONArray) params.get("interfaces");
+        for(Object i: tInterfaces){
+          Interface tInterface = new Interface();
+          tInterface.setName(((JSONObject)i).get("name").toString());
+          tInterface.setAdress(((JSONObject)i).get("adress").toString());
+          tInterface.setMac(((JSONObject)i).get("mac").toString());
+          tInterface.setMask(((JSONObject)i).get("mask").toString());
+          tInterface.setState(((JSONObject)i).get("state").toString());
+          tInterface.setTxBytes(((JSONObject)i).get("tx").toString());
+          tInterface.setRxBytes(((JSONObject)i).get("rx").toString());
+          this.interfaces.add(tInterface);
+        }
+      }
+      catch(Exception ignored){ }
+
+      try{
+        JSONArray tDisks = (JSONArray) params.get("disks");
+        for(Object d: tDisks){
+          Disk tDisk = new Disk();
+          tDisk.setName(((JSONObject) d).get("name").toString());
+          this.disks.add(tDisk);
+        }
+      }
+      catch(Exception ignored){  }
+
+      try{
+        JSONArray tSlices = (JSONArray) params.get("slices");
+        for(Object s: tSlices){
+          Slice tSlice = new Slice();
+          tSlice.setMntNameFrom(((JSONObject)s).get("mountFrom").toString());
+          tSlice.setMntNameTo(((JSONObject)s).get("mountTo").toString());
+          tSlice.setTotalSize(((JSONObject)s).get("totalSize").toString());
+          tSlice.setUsedSize(((JSONObject)s).get("usedSize").toString());
+          tSlice.setFreeSize(((JSONObject)s).get("freeSize").toString());
+          this.slices.add(tSlice);
+        }
+      }
+      catch(Exception ignored){ }
+
+      try{
+        JSONArray tZpools = (JSONArray) params.get("zpools");
+        for(Object z: tZpools){
+          Zpool tZpool = new Zpool(((JSONObject) z).get("name").toString());
+          //tZpool.setName(((JSONObject) z).get("name").toString());
+          //tZpool.setAlloc();
+          //tZpool.setSize();
+          //tZpool.getFree();
+          this.zpools.add(tZpool);
+        }
+      }
+      catch(Exception ignored){ }
+
 
     }
 
@@ -81,35 +203,35 @@ public class Host {
 
     }
 
-    public void Inicialize(){
-      osType = System.getProperty("os.name");
-
-      cpu = new Cpu();
-      memory = new Memory();
-      power = new Power();
-      System.out.println("CPU usage: " + cpu.UpdateUsage());
-
-      File[] roots = File.listRoots();
-
-      for (File root : roots) {
-        System.out.println("File system root: " + root.getAbsolutePath());
-        System.out.println("Total space (bytes): " + Format.Humanize_number(root.getTotalSpace(), 2));
-        System.out.println("Free space (bytes): " + Format.Humanize_number(root.getFreeSpace(),2));
-
-      }
-
-      try {
-        uname = Systems.exec("uname -nprs");
-      }
-      catch (IOException e) {
-        Log.getInstance().E("CORE.Power",e.getMessage());
-        Display.getInstance().E("CORE.Power",e.getMessage());
-      }
-      catch (InterruptedException e) {
-        Log.getInstance().E("CORE.Power",e.getMessage());
-        Display.getInstance().E("CORE.Power",e.getMessage());
-      }
-    }
+//    public void Inicialize(){
+//      osType = System.getProperty("os.name");
+//
+//      cpu = new Cpu();
+//      memory = new Memory();
+//      power = new Power();
+//      //System.out.println("CPU usage: " + cpu.UpdateUsage());
+//
+//      File[] roots = File.listRoots();
+//
+//      for (File root : roots) {
+//        System.out.println("File system root: " + root.getAbsolutePath());
+//        System.out.println("Total space (bytes): " + Format.Humanize_number(root.getTotalSpace(), 2));
+//        System.out.println("Free space (bytes): " + Format.Humanize_number(root.getFreeSpace(),2));
+//
+//      }
+//
+//      try {
+//        uname = Systems.exec("uname -nprs");
+//      }
+//      catch (IOException e) {
+//        Log.getInstance().E("CORE.Power",e.getMessage());
+//        Display.getInstance().E("CORE.Power",e.getMessage());
+//      }
+//      catch (InterruptedException e) {
+//        Log.getInstance().E("CORE.Power",e.getMessage());
+//        Display.getInstance().E("CORE.Power",e.getMessage());
+//      }
+//    }
 
     public JSONObject toJson(){
       JSONObject tHost = new JSONObject();

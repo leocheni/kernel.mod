@@ -8,13 +8,6 @@ import net.msdh.kernel.utils.Log;
 
 import java.io.IOException;
 
-/**
- * Created by IntelliJ IDEA.
- * User: TkachenkoAA
- * Date: 19.05.17
- * Time: 12:54
- * To change this template use File | Settings | File Templates.
- */
 public class Kernel {
 
   public static void main(String[] args){

@@ -17,7 +17,13 @@ public class Slice {
   private String freeSizel;
   private String fsType;
 
-    public Slice() {
+    public Slice(){
+      this.mntNameTo = "N/A";
+      this.mntNameFrom = "N/A";
+      this.totalSize = "N/A";
+      this.usedSize = "N/A";
+      this.freeSizel = "N/A";
+      this.fsType = "N/A";
     }
 
     public Slice(String mntNameTo, String mntNameFrom, String totalSize, String usedSize, String freeSizel, String fsType) {

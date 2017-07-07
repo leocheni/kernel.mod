@@ -1,11 +1,6 @@
 package net.msdh.kernel.system;
 
-import com.sun.management.OperatingSystemMXBean;
 import net.minidev.json.JSONObject;
-
-import java.lang.management.ManagementFactory;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,20 +10,24 @@ import java.util.Map;
  * To change this template use File | Settingsdddd | File Templates.
  */
 public class Cpu{
-    private OperatingSystemMXBean myOsBean;
+
     public int cores;
     public String model;
     public String freq;
     public String temp;
     public int usage;
 
-    private long lastSystemTime      = 0;
-    private long lastProcessCpuTime  = 0;
+ //   private long lastSystemTime      = 0;
+  //  private long lastProcessCpuTime  = 0;
 
 
     public Cpu(){
-      myOsBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-      cores = myOsBean.getAvailableProcessors();
+      this.model = "N/A";
+      this.cores = 0;
+      this.freq = "N/A";
+      this.temp = "N/A";
+      this.usage = 0;
+
     }
 
     Cpu(int cores, String model, String freq, String temp, int usage){
@@ -37,57 +36,57 @@ public class Cpu{
       this.freq = freq;
       this.temp = temp;
       this.usage = usage;
-      myOsBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+      //myOsBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
     }
 
-    public synchronized double UpdateUsage(){
-
-       long nanoBefore = System.nanoTime();
-       long cpuBefore = myOsBean.getProcessCpuTime();
-
-       System.out.println("nanoBefor: "+nanoBefore);
-       System.out.println("CpuBefor: "+cpuBefore);
-       try {
-            Thread.sleep(4000);
-       } catch (InterruptedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-       }
-
-
-       long cpuAfter = myOsBean.getProcessCpuTime();
-       long nanoAfter = System.nanoTime();
-
-       System.out.println("nanoAfter: "+nanoAfter);
-       System.out.println("cpuAfter: "+cpuAfter);
-
-       long percent;
-       //if (nanoAfter > nanoBefore)
-         percent = ((cpuAfter-cpuBefore)*100L)/(nanoAfter-nanoBefore);
-       //else
-       //  percent = 0;
-
-       System.out.println("Cpu usage: "+percent+"%");
-       return  percent;
-
-//      if( lastSystemTime == 0){
-//        baselineCounters();
-//        //return -1;
+//    public synchronized double UpdateUsage(){
 //
-//      }
-
-//      lastSystemTime = System.nanoTime();
-//      lastProcessCpuTime = myOsBean.getProcessCpuTime();
+//       long nanoBefore = System.nanoTime();
+//       long cpuBefore = myOsBean.getProcessCpuTime();
 //
-//      long systemTime = System.nanoTime();
-//      long processCpuTime = 0;
+//       System.out.println("nanoBefor: "+nanoBefore);
+//       System.out.println("CpuBefor: "+cpuBefore);
+//       try {
+//            Thread.sleep(4000);
+//       } catch (InterruptedException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//       }
 //
 //
-//      processCpuTime = myOsBean.getProcessCpuTime();
-//      double cpuUsage = (double) ( processCpuTime - lastProcessCpuTime ) / ( systemTime - lastSystemTime );
-//      lastSystemTime     = systemTime;
-//      lastProcessCpuTime = processCpuTime;
-//      return cpuUsage / cores;
-    }
+//       long cpuAfter = myOsBean.getProcessCpuTime();
+//       long nanoAfter = System.nanoTime();
+//
+//       System.out.println("nanoAfter: "+nanoAfter);
+//       System.out.println("cpuAfter: "+cpuAfter);
+//
+//       long percent;
+//       //if (nanoAfter > nanoBefore)
+//         percent = ((cpuAfter-cpuBefore)*100L)/(nanoAfter-nanoBefore);
+//       //else
+//       //  percent = 0;
+//
+//       System.out.println("Cpu usage: "+percent+"%");
+//       return  percent;
+//
+////      if( lastSystemTime == 0){
+////        baselineCounters();
+////        //return -1;
+////
+////      }
+//
+////      lastSystemTime = System.nanoTime();
+////      lastProcessCpuTime = myOsBean.getProcessCpuTime();
+////
+////      long systemTime = System.nanoTime();
+////      long processCpuTime = 0;
+////
+////
+////      processCpuTime = myOsBean.getProcessCpuTime();
+////      double cpuUsage = (double) ( processCpuTime - lastProcessCpuTime ) / ( systemTime - lastSystemTime );
+////      lastSystemTime     = systemTime;
+////      lastProcessCpuTime = processCpuTime;
+////      return cpuUsage / cores;
+//    }
 
     public JSONObject toJson(){
       JSONObject params = new JSONObject();

@@ -10,13 +10,6 @@ import net.msdh.kernel.ui.Display;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by IntelliJ IDEA.
- * User: TkachenkoAA
- * Date: 19.05.17
- * Time: 14:27
- * To change this template use File | Settings | File Templates.
- */
 public class UsrHandler {
    public String Run(Command cmd, Core core){
      String name = null,action = null,password = null,login = null, answer = null;

@@ -1,6 +1,5 @@
 package net.msdh.kernel.timer;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2ParseException;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
@@ -34,6 +33,7 @@ public class Timer {
      countTimer = 0;
       //timerContexts.capacity(200);
      corePort = Integer.parseInt(Settings.getInstance().Base.get("corePort").toString());
+     this.timerContexts = new Vector<TimerContext>();
      coreAdress = "127.0.0.1";
    }
 

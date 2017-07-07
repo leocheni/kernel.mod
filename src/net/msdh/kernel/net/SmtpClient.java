@@ -20,7 +20,6 @@ public class SmtpClient {
 
  private String mailhost;
  private int port;
- private Properties properties;
  private Session session;
  private String from = "base.msdh@yandex.ru";
 
@@ -29,27 +28,25 @@ public SmtpClient(){
 
 }
 
-    public SmtpClient(String mailhost, int port) {
+public SmtpClient(String mailhost, int port) {
         this.mailhost = mailhost;
         this.port = port;
         this.session = null;
-    }
+}
 
-    public boolean Connect(String connectString){
+public boolean Connect(String connectString){
 
-   properties = new Properties();
-   properties.put("mail.smtp.host", mailhost);
-   properties.put("mail.smtp.port", port);
-   properties.put("mail.smtp.auth", "true");
-   properties.put("mail.smtp.ssl.enable", "true");
-   properties.put("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");
+      Properties properties = new Properties();
+      properties.put("mail.smtp.host", mailhost);
+      properties.put("mail.smtp.port", port);
+      properties.put("mail.smtp.auth", "true");
+      properties.put("mail.smtp.ssl.enable", "true");
+      properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 
+      Session session = Session.getInstance(properties, null);
+      session.setDebug(false);
 
-
-   Session session = Session.getInstance(properties, null);
-   session.setDebug(false);
-
-  return true;
+       return true;
 }
 
 
@@ -76,14 +73,11 @@ public boolean SendMessage(String to, String message){
 		// setText(text, charset)
 	msg.setText(message);
 	//    }
-
-
     msg.setHeader("X-Mailer", "msgsend");
     msg.setSentDate(new Date());
 
 	Transport.send(msg);
-
-	System.out.println("\nMail was sent successfully.");
+    System.out.println("\nMail was sent successfully.");
   }
   catch(MessagingException e){
         e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -131,6 +125,10 @@ public boolean SendMessage(String to, String message){
   return true;
 }
 
+public void close (){
+  //session.
+
+}
 
 /*string SmtpClient::getLine(){
 

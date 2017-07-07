@@ -42,7 +42,7 @@ public class Queue {
 
     //String[] tokens = line.split(" ");
       //if(tokens.length>4) return;
-
+    command.setId(1);
     command.setMethod(tokens[0]);
     switch(tokens.length){
       case 4:{params.put("add",tokens[3]);      }

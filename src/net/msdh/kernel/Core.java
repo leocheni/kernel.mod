@@ -1,10 +1,10 @@
 package net.msdh.kernel;
 
-import com.sun.xml.internal.ws.api.config.management.policy.ManagementAssertion;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2ParseException;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
-import net.msdh.kernel.answer.Result;
+import net.msdh.kernel.answer.*;
+import net.msdh.kernel.base.Command;
 import net.msdh.kernel.base.Queue;
 import net.msdh.kernel.device.Dev;
 import net.msdh.kernel.device.Devices;
@@ -28,14 +28,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-
-/**
- * Created by IntelliJ IDEA.
- * User: TkachenkoAA
- * Date: 19.05.17
- * Time: 13:07
- * To change this template use File | Settings | File Templates.
- */
 public class Core {
 
   private final static String TAG = "CORE";
@@ -47,9 +39,6 @@ public class Core {
 
   private String coreAdress;
   private int corePort;
-
-
-
 
   public Core(){
 
@@ -181,7 +170,7 @@ public class Core {
 
          Display.getInstance().D(TAG+".Manager", (new Date()) + ": Get raw command: " + line);
          Log.getInstance().D(TAG+".Manager", "Get raw command: " + line);
-         ///todo отладить в режиме дебага отправку всех комнад на консоль.
+
          try{
 
            JSONObject aBase = (JSONObject)Settings.getInstance().Base.get("base");
@@ -206,9 +195,55 @@ public class Core {
          Q.JParser(line);
 
          if((Q.getCommand().getMethod().equals("system"))&&(Q.getCommand().getParams().get("action").equals("down"))){
-           if(Q.getCommand().getParams().containsKey("dilay")){
-             int dilay = Integer.parseInt(Q.getCommand().getParams().get("dilay").toString());
+           if(Q.getCommand().getParams().containsKey("item")){
+             int dilay = Integer.parseInt(Q.getCommand().getParams().get("item").toString());
              ///todo установить таймер на выключение, разработать модуль таймера
+             Map<String,Object> error = new HashMap<String, Object>();
+
+             try {
+               Mod timer = Modules.GetMod("timer");
+               if(timer.getStatus().equals("up")){
+
+                 Map<String,Object> params = new HashMap<String, Object>();
+                 params.put("action","down");
+                 Command shutdownCmd = new Command("system",params,9);
+
+                 Map<String,Object> paramsTmr = new HashMap<String, Object>();
+                 paramsTmr.put("count",dilay);
+                 paramsTmr.put("command",shutdownCmd.toJson());
+                 try{
+                   nc.Send(timer.getAdress(),timer.getPort(),new Command("add",paramsTmr,0).toJson());
+                   nc.Close();
+                 }
+                 catch(Exception e){
+                   error.put("code",200);
+                   error.put("source","core");
+                   error.put("message",e.getMessage());
+                   ns.Send( new net.msdh.kernel.answer.Error(0,error).toJson());
+                 }
+               }
+               else{
+
+                  error.put("code",200);
+                  error.put("source","core");
+                  error.put("message","Error: timer mod is down state");
+
+                  ns.Send( new net.msdh.kernel.answer.Error(0,error).toJson());
+
+                 Log.getInstance().E(TAG+".Manager","Error: timer mod is down state");
+                 Display.getInstance().E(TAG+".Manager","Error: timer mod is down state");
+               }
+             }
+             catch (CoreException e) {
+               error.put("code",e.getCode());
+               error.put("source",e.getSource());
+               error.put("message",e.getMessage());
+
+               ns.Send( new net.msdh.kernel.answer.Error(0,error).toJson());
+               Log.getInstance().E(TAG+".Manager","Error: " + e.getMessage());
+               Display.getInstance().E(TAG+".Manager","Error: " + e.getMessage());
+             }
+
            }
            else{
 
