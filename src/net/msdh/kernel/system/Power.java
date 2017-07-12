@@ -4,22 +4,12 @@ import net.minidev.json.JSONObject;
 import net.msdh.kernel.settings.Settings;
 import net.msdh.kernel.ui.Display;
 import net.msdh.kernel.utils.Log;
-import org.w3c.dom.ranges.RangeException;
 
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-/**
- * Created by IntelliJ IDEA.
- * User: TkachenkoAA
- * Date: 04.07.16
- * Time: 11:06
- * To change this template use File | Settingsdddd | File Templates.
- */
 public class Power {
 
   private boolean inicialized;

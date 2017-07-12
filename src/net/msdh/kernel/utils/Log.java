@@ -6,13 +6,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by IntelliJ IDEA.
- * User: TkachenkoAA
- * Date: 10.06.16
- * Time: 11:22
- * To change this template use File | Settings | File Templates.
- */
 
 public class Log {
   private static volatile Log instance;

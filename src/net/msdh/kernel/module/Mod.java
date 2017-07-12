@@ -7,17 +7,11 @@ import net.msdh.kernel.system.Systems;
 import net.msdh.kernel.ui.Display;
 import net.msdh.kernel.utils.Log;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by IntelliJ IDEA.
- * User: TkachenkoAA
- * Date: 19.05.17
- * Time: 14:03
- * To change this template use File | Settings | File Templates.
- */
 public class Mod {
   private String name;
   private String status;
@@ -38,65 +32,33 @@ public class Mod {
   Log.getInstance().D("MODULE::MOD", "run: " + run + "/" + name);
   Log.getInstance().D("MODULE::MOD", "bin: " + bin + "/" + name);
 
-      try {
-          ///todo сделать проверку наличия модуля в папке модуля
+  //String binFile = bin+"/"+name+".jar";
+  String binFile = "F:/dev/projects/lab/dh/kernel.mod/out/artifacts/kernel/modules"+"/"+name+".jar";
 
-          Systems.run("java -jar " +"../modules/" +name+".jar"); ///todo сделать обработку ошибки запуска jar файла
-          status = "up";
-          Display.getInstance().E("Mod.Load", name + " mod start ok");
-      }
-      catch (IOException e) {
-        Log.getInstance().E("Mod.Load",e.getMessage());
-        Display.getInstance().E("Mod.Load",e.getMessage());
-        throw new CoreException(800,"Mod.Load",e.getMessage());
-      }
-      catch (InterruptedException e) {
-        Log.getInstance().E("Mod.Load",e.getMessage());
-        Display.getInstance().E("Mod.Load",e.getMessage());
-        throw new CoreException(800,"Mod.Load",e.getMessage());
+  try{
 
-      }
+    File file = new File(binFile);
+    if(file.exists() && file.isFile()){
+      //System.out.println("exec: " + Systems.exec("java -jar " + binFile)); ///todo сделать обработку ошибки запуска jar файла через создание lock файла
+      //status = "up";
+      Systems.eExec("java -jar " + binFile);
+      Display.getInstance().E("Mod.Load", name + " mod start ok");
+    }
+    else {
+      throw new CoreException(800,"Mod.Load","Mod bin file not found");
+    }
+  }
+  catch(IOException e){
+    Log.getInstance().E("Mod.Load",e.getMessage());
+    Display.getInstance().E("Mod.Load",e.getMessage());
+    throw new CoreException(800,"Mod.Load",e.getMessage());
+  }
+  catch (InterruptedException e) {
+    Log.getInstance().E("Mod.Load",e.getMessage());
+    Display.getInstance().E("Mod.Load",e.getMessage());
+    throw new CoreException(800,"Mod.Load",e.getMessage());
+  }
       ///todo реализовать загрузку jar файла в другом процессе JVM.
-//  if(File::fileExists((bin+"/"+name).c_str())){
-//    pid=fork();
-//    if(pid<0){
-//      Log::getInstance().E("MODULE::MOD","Error fork process");
-//      throw(CoreExeption(800,"MODULE::MOD Error fork process"));
-//    }
-//    if(pid==0){
-//
-//
-//     // cout<<"data tables size: "<<getdtablesize()<<endl;
-//     // int fd = getdtablesize();
-//     // while(--fd>3){
-//     //   close(fd);
-//     // }
-//
-//       for(int fdi = getdtablesize()-1;fdi>2;--fdi){
-//         close(fdi);
-//       }
-//
-//      //Connect.CloseServer();
-//
-//      string config = "{\"corePort\":\""+Format::IntToString(corePort)+"\",\"port\":\""+Format::IntToString(port)+"\",\"run\":\""+run+"\",\"name\":\""+name+"\"}";
-//
-//      Log::getInstance().D("MODULE::MOD", "bin: " + bin);
-//
-//      //cout<<"Bin: "<<bin<<endl;
-//
-//      if(execl((bin+"/"+name).c_str(),name.c_str(),config.c_str(),NULL) == -1){
-//        cout<<string("Error exec module new proc: ").append(strerror(errno))<<endl;
-//        Log::getInstance().E("MODULE::MOD",string("Error exec module new proc: ").append(strerror(errno)));
-//        exit(0);
-//      }
-//
-//    }
-//  }
-//  else{
-//    Log::getInstance().W("MODULE::MOD::Load","File " + bin+"/"+name+" not exist");
-//    Display::getInstance().SetLine("MODULE::MOD::Load Error: File " + bin+"/"+name+" not exist",'e');
-//  }
-     //dalie process obmena c modulem
 }
 
 public void unload(boolean force) throws CoreException {
@@ -107,7 +69,7 @@ public void unload(boolean force) throws CoreException {
     throw new CoreException(800,"MODULE::MOD"," module down state");
   }
 
-  if(force){
+  if(force){ ///todo принудительное завершение процесса??
 
 //      pidFile = open(run.c_str(),O_CREAT|O_TRUNC|O_RDWR,0644);
 //
@@ -228,24 +190,4 @@ public int getCorePort(){
 public void setCorePort(int corePort){
   this.corePort=corePort;
 }
-//// tut nuzhno proverit kak rabotaet
-//Command Mod::getCommand(std::string cmdName){
-//  Command cm = Command();
-//  //cm.SetDis("5");
-//
-//  return cm;
-//}
-//
-//void Mod::addCommand(Command cmd){
-//
-//}
-//
-//string Mod::getCommandsList(){
-//
-//  //return list<Command>[0];
-//
-//  return "commands";
-//}
-
-
 }

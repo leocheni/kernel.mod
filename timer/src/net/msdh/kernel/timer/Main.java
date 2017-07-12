@@ -7,26 +7,18 @@ import net.msdh.kernel.utils.Log;
 
 import java.io.IOException;
 
-/**
- * Created by IntelliJ IDEA.
- * User: TkachenkoAA
- * Date: 09.06.17
- * Time: 9:30
- * To change this template use File | Settings | File Templates.
- */
-
 public class Main {
 
-    public static void main(String[] args) {
+    public static int main(String[] args) {
       try {
         Log.getInstance().Open("F:\\dev\\projects\\lab\\dh\\kernel.mod\\out\\artifacts\\kernel\\log\\timer.log");
-        //Log.getInstance().Open("log/timer.log");
+        //Log.getInstance().Open("../log/timer.log");
         Log.getInstance().setLevel("DEBUG");
         Log.getInstance().I("MAIN","====================HD:Start=====================");
         Display.getInstance().setLevel("DEBUG");
         //if(argc == 2){
 
-          //Settings.getInstance().Load("conf/timer.conf");
+          //Settings.getInstance().Load("../conf/timer.conf");
           Settings.getInstance().Load("F:\\dev\\projects\\lab\\dh\\kernel.mod\\out\\artifacts\\kernel\\conf\\timer.conf");
           Timer timer = new Timer();
           timer.Load();
@@ -42,9 +34,11 @@ public class Main {
       }
       catch (ParseException e){
         System.out.println("Timer.Main::Global Error parsing config: " + e.getMessage());
+        return 1;
       }
       catch (IOException e){
         System.out.println("Timer.Main::Global Error:" + e.getMessage());
       }
+        return 1;
     }
 }

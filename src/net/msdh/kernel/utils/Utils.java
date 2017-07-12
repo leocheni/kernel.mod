@@ -7,13 +7,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * Created by IntelliJ IDEA.
- * User: TkachenkoAA
- * Date: 29.06.16
- * Time: 14:05
- * To change this template use File | Settings | File Templates.
- */
 public class Utils {
 
   public static ImageIcon createImageIcon(String path) {
