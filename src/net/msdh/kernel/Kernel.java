@@ -16,7 +16,7 @@ public class Kernel {
       //System.out.println(Log.getInstance().getClass().getResource("/"));
       Log.getInstance().Open("F:\\dev\\projects\\lab\\dh\\kernel.mod\\out\\artifacts\\kernel\\log\\core.log");
       //Log.getInstance().Open("C:\\projects\\dh\\kernel.mod\\out\\artifacts\\kernel\\log\\core.log");
-      //Log.getInstance().Open("log/core.log");
+      //Log.getInstance().Open("../log/core.log");
      }
     catch (IOException e){
       System.out.println("Error loading log file: " + e.getMessage());
@@ -29,7 +29,7 @@ public class Kernel {
     try{
       Settings.getInstance().Load("F:\\dev\\projects\\lab\\dh\\kernel.mod\\out\\artifacts\\kernel\\conf\\msdh.conf");
       //Settings.getInstance().Load("C:\\projects\\dh\\kernel.mod\\out\\artifacts\\kernel\\conf\\msdh.conf");
-      //Settings.getInstance().Load("conf/msdh.conf");
+      //Settings.getInstance().Load("../conf/msdh.conf");
     }
     catch (IOException e){
       System.out.println("Error load config: " + e.getMessage());
